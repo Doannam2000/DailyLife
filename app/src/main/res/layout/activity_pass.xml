@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/passwordscreen1"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    tools:context=".PassActivity">
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginTop="50dp"
+        android:src="@drawable/khoa"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="Nhập mật khẩu nà"
+        android:textColor="#DD89DC"
+        android:textSize="20dp"
+        app:layout_constraintEnd_toEndOf="@+id/imageView"
+        app:layout_constraintStart_toStartOf="@+id/imageView"
+        app:layout_constraintTop_toBottomOf="@+id/imageView" />
+
+    <ImageView
+        android:id="@+id/imagePass"
+        android:layout_marginTop="10dp"
+        android:layout_width="150dp"
+        android:layout_height="30dp"
+        app:layout_constraintEnd_toEndOf="@+id/textView"
+        app:layout_constraintStart_toStartOf="@+id/textView"
+        app:layout_constraintTop_toBottomOf="@+id/textView" />
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
+
+            <TextView
+                android:id="@+id/btn1"
+                style="@style/fontNumber"
+                android:text="1" />
+
+            <TextView
+                android:id="@+id/btn2"
+                style="@style/fontNumber"
+                android:text="2" />
+
+            <TextView
+                android:id="@+id/btn3"
+                style="@style/fontNumber"
+                android:text="3" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
+
+            <TextView
+                android:id="@+id/btn4"
+                style="@style/fontNumber"
+                android:text="4" />
+
+            <TextView
+                android:id="@+id/btn5"
+                style="@style/fontNumber"
+                android:text="5" />
+
+            <TextView
+                android:id="@+id/btn6"
+                style="@style/fontNumber"
+                android:text="6" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
+
+            <TextView
+                android:id="@+id/btn7"
+                style="@style/fontNumber"
+                android:text="7" />
+
+            <TextView
+                android:id="@+id/btn8"
+                style="@style/fontNumber"
+                android:text="8" />
+
+            <TextView
+                android:id="@+id/btn9"
+                style="@style/fontNumber"
+                android:text="9" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="40dp"
+            android:layout_weight="1">
+
+            <TextView
+                style="@style/fontNumber" />
+
+            <TextView
+                android:id="@+id/btn0"
+                style="@style/fontNumber"
+                android:text="0" />
+
+            <TextView
+                android:id="@+id/btnC"
+                style="@style/fontNumber"
+                android:text="⌫" />
+        </LinearLayout>
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
