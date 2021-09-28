@@ -50,7 +50,7 @@
             android:layout_marginRight="20dp"
             android:layout_marginBottom="40dp"
             android:backgroundTint="@color/pink"
-            android:src="@drawable/ic_baseline_add_24"
+            android:src="@drawable/ic_baseline_edit_24"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>

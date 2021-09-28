@@ -24,9 +24,9 @@ class CalendarFrag : Fragment() {
 
     private var mSelectedPageIndex = 1
     var list = ArrayList<CalendarFragment>()
-    var listday = arrayListOf<String>("Mon", "Tue", "Wed", "Thur", "Fri", "Sat", "Sun")
-    var sdfMonth = SimpleDateFormat("MMMM", Locale.ENGLISH)
-    var sdfYear = SimpleDateFormat("yyyy", Locale.ENGLISH)
+    var listday = arrayListOf<String>("T.2", "T.3", "T.4", "T.5", "T.6", "T.7", "CN")
+    var sdfMonth = SimpleDateFormat("MMMM", Locale.getDefault())
+    var sdfYear = SimpleDateFormat("yyyy", Locale.getDefault())
 
 
     override fun onCreateView(
@@ -85,45 +85,45 @@ class CalendarFrag : Fragment() {
         view.viewPager.offscreenPageLimit = 2
         view.viewPager.setCurrentItem(1, false)
         var adapterDay = DayAdapter(listday)
-//        view.setting.setOnClickListener {
-//            var popupMenu = PopupMenu(context, it)
-//            popupMenu.menuInflater.inflate(R.menu.menu, popupMenu.menu)
-//            popupMenu.show()
-//            popupMenu.setOnMenuItemClickListener {
-//                when (it.itemId) {
-//                    R.id.mon -> {
-//                        changeStart(5) //-2
-//                        changeDay("Mon")
-//                    }
-//                    R.id.tue -> {
-//                        changeStart(4) //-3
-//                        changeDay("Tue")
-//                    }
-//                    R.id.wed -> {
-//                        changeStart(3) //-4
-//                        changeDay("Wed")
-//                    }
-//                    R.id.thur -> {
-//                        changeStart(2) //-5
-//                        changeDay("Thur")
-//                    }
-//                    R.id.fri -> {
-//                        changeStart(1)
-//                        changeDay("Fri")
-//                    }
-//                    R.id.sat -> {
-//                        changeStart(0)
-//                        changeDay("Sat")
-//                    }
-//                    R.id.sun -> {
-//                        changeStart(-1)
-//                        changeDay("Sun")
-//                    }
-//                }
-//                adapterDay.notifyDataSetChanged()
-//                false
-//            }
-//        }
+        view.setting.setOnClickListener {
+            var popupMenu = PopupMenu(context, it)
+            popupMenu.menuInflater.inflate(R.menu.menu, popupMenu.menu)
+            popupMenu.show()
+            popupMenu.setOnMenuItemClickListener {
+                when (it.itemId) {
+                    R.id.mon -> {
+                        changeStart(5) //-2
+                        changeDay("T.2")
+                    }
+                    R.id.tue -> {
+                        changeStart(4) //-3
+                        changeDay("T.3")
+                    }
+                    R.id.wed -> {
+                        changeStart(3) //-4
+                        changeDay("T.4")
+                    }
+                    R.id.thur -> {
+                        changeStart(2) //-5
+                        changeDay("T.5")
+                    }
+                    R.id.fri -> {
+                        changeStart(1)
+                        changeDay("T.6")
+                    }
+                    R.id.sat -> {
+                        changeStart(0)
+                        changeDay("T.7")
+                    }
+                    R.id.sun -> {
+                        changeStart(-1)
+                        changeDay("CN")
+                    }
+                }
+                adapterDay.notifyDataSetChanged()
+                false
+            }
+        }
 
         // hiển thị ngày trong tuần
 

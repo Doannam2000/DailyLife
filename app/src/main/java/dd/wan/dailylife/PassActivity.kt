@@ -18,6 +18,7 @@ class PassActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_pass)
+        supportActionBar?.hide()
         sharedPreferences = getSharedPreferences("SHARE_PREFERENCES", Context.MODE_PRIVATE)
         pin = sharedPreferences.getInt("pin", 0)
 
