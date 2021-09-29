@@ -53,10 +53,10 @@ class CalendarFragment : Fragment() {
         calendarRecycler.layoutManager = layoutManager
         calendarRecycler.setHasFixedSize(true)
         calendarRecycler.setItemViewCacheSize(42)
-        var dividerItemDecoration = DividerItemDecoration(context, DividerItemDecoration.HORIZONTAL)
-        var dividerItemDecoration1 = DividerItemDecoration(context, DividerItemDecoration.VERTICAL)
-        calendarRecycler.addItemDecoration(dividerItemDecoration)
-        calendarRecycler.addItemDecoration(dividerItemDecoration1)
+//        var dividerItemDecoration = DividerItemDecoration(context, DividerItemDecoration.HORIZONTAL)
+//        var dividerItemDecoration1 = DividerItemDecoration(context, DividerItemDecoration.VERTICAL)
+//        calendarRecycler.addItemDecoration(dividerItemDecoration)
+//        calendarRecycler.addItemDecoration(dividerItemDecoration1)
         calendarRecycler.adapter = adapter
     }
 

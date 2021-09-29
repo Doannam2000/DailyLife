@@ -13,12 +13,13 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         app:layout_constraintGuide_percent="0.68" />
+
     <LinearLayout
         android:id="@+id/linearLayout2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#83C2CA"
         android:gravity="center"
+        android:background="#A47EEC"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -63,15 +64,27 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toTopOf="@+id/guideline2">
 
-        <TextView
+        <LinearLayout
+            android:id="@+id/addDiary"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:gravity="center"
             android:paddingHorizontal="10dp"
             android:paddingVertical="5dp"
-            android:text="Thêm sự kiện"
-            android:textColor="@color/pink"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_baseline_add_24" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Thêm sự kiện"
+                android:textColor="@color/pink" />
+        </LinearLayout>
 
         <LinearLayout
             android:id="@+id/setting"
@@ -83,10 +96,10 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
-            <ImageButton
+            <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@android:color/transparent"
+                android:layout_marginRight="10dp"
                 android:src="@drawable/ic_baseline_settings_24" />
 
             <TextView
@@ -96,5 +109,27 @@
                 android:textColor="@color/pink" />
         </LinearLayout>
 
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_diary"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:background="#ECE8E8"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/addDiary" />
+
+        <TextView
+            android:id="@+id/txtNoEvent"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:text="Không có sự kiện nào"
+            android:textColor="@color/gray"
+            android:gravity="center"
+            android:background="#ECE8E8"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/addDiary" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

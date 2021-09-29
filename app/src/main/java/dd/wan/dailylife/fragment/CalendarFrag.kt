@@ -1,5 +1,6 @@
 package dd.wan.dailylife.fragment
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -11,6 +12,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager.widget.ViewPager
 import androidx.viewpager2.widget.ViewPager2
+import dd.wan.dailylife.AddDiaryActivity
 import dd.wan.dailylife.R
 import dd.wan.dailylife.adapter.ViewPagerAdapter
 import kotlinx.android.synthetic.main.fragment_calendar2.view.*
@@ -25,7 +27,7 @@ class CalendarFrag : Fragment() {
     private var mSelectedPageIndex = 1
     var list = ArrayList<CalendarFragment>()
     var listday = arrayListOf<String>("T.2", "T.3", "T.4", "T.5", "T.6", "T.7", "CN")
-    var sdfMonth = SimpleDateFormat("MMMM", Locale.getDefault())
+    var sdfMonth = SimpleDateFormat("MM", Locale.getDefault())
     var sdfYear = SimpleDateFormat("yyyy", Locale.getDefault())
 
 
@@ -42,7 +44,7 @@ class CalendarFrag : Fragment() {
         prevMonth.add(Calendar.MONTH, -1)
         nextMonth.add(Calendar.MONTH, 1)
         var month = sdfMonth.format(calendar.time)
-        view.tv_month.text = month
+        view.tv_month.text = "Tháng "+month
         var year = sdfYear.format(calendar.time)
         view.tv_year.text = year
 
@@ -76,7 +78,7 @@ class CalendarFrag : Fragment() {
                     }
                     view.viewPager.setCurrentItem(1, false)
                     var cal = list[1].getCurrentCalendar()
-                    view.tv_month.text = sdfMonth.format(cal.time)
+                    view.tv_month.text = "Tháng "+sdfMonth.format(cal.time)
                     view.tv_year.text = sdfYear.format(cal.time)
                 }
             }
@@ -125,6 +127,7 @@ class CalendarFrag : Fragment() {
             }
         }
 
+        view.addDiary.setOnClickListener{startActivity(Intent(activity,AddDiaryActivity::class.java))}
         // hiển thị ngày trong tuần
 
         val layoutManager: RecyclerView.LayoutManager =
