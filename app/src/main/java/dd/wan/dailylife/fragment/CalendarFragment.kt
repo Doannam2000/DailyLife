@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
-import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import dd.wan.dailylife.R
@@ -53,10 +52,6 @@ class CalendarFragment : Fragment() {
         calendarRecycler.layoutManager = layoutManager
         calendarRecycler.setHasFixedSize(true)
         calendarRecycler.setItemViewCacheSize(42)
-//        var dividerItemDecoration = DividerItemDecoration(context, DividerItemDecoration.HORIZONTAL)
-//        var dividerItemDecoration1 = DividerItemDecoration(context, DividerItemDecoration.VERTICAL)
-//        calendarRecycler.addItemDecoration(dividerItemDecoration)
-//        calendarRecycler.addItemDecoration(dividerItemDecoration1)
         calendarRecycler.adapter = adapter
     }
 
@@ -110,5 +105,8 @@ class CalendarFragment : Fragment() {
 
     fun getCurrentCalendar(): Calendar {
         return calendar
+    }
+    fun getItemSelected():Date{
+        return adapter.daySelected
     }
 }

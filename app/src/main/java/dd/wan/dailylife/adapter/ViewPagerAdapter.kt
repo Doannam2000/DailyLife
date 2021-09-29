@@ -22,5 +22,4 @@ class ViewPagerAdapter(
         return list.get(position)
     }
 
-    
 }

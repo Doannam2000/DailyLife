@@ -16,7 +16,6 @@ import dd.wan.dailylife.AddDiaryActivity
 import dd.wan.dailylife.R
 import dd.wan.dailylife.adapter.ViewPagerAdapter
 import kotlinx.android.synthetic.main.fragment_calendar2.view.*
-import kotlinx.android.synthetic.main.toolbar.view.*
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.Calendar
@@ -87,6 +86,22 @@ class CalendarFrag : Fragment() {
         view.viewPager.offscreenPageLimit = 2
         view.viewPager.setCurrentItem(1, false)
         var adapterDay = DayAdapter(listday)
+        view.addDiary.setOnClickListener{
+            var intent = Intent(activity,AddDiaryActivity::class.java)
+            intent.putExtra("date",list[1].getItemSelected())
+            startActivity(intent)
+        }
+        // hiển thị ngày trong tuần
+
+        val layoutManager: RecyclerView.LayoutManager =
+            GridLayoutManager(context, 7)
+        view.dayOfWeek.layoutManager = layoutManager
+        view.dayOfWeek.setHasFixedSize(true)
+        view.dayOfWeek.setItemViewCacheSize(7)
+        view.dayOfWeek.adapter = adapterDay
+
+
+        // chọn ngày bắt đầu
         view.setting.setOnClickListener {
             var popupMenu = PopupMenu(context, it)
             popupMenu.menuInflater.inflate(R.menu.menu, popupMenu.menu)
@@ -126,16 +141,6 @@ class CalendarFrag : Fragment() {
                 false
             }
         }
-
-        view.addDiary.setOnClickListener{startActivity(Intent(activity,AddDiaryActivity::class.java))}
-        // hiển thị ngày trong tuần
-
-        val layoutManager: RecyclerView.LayoutManager =
-            GridLayoutManager(context, 7)
-        view.dayOfWeek.layoutManager = layoutManager
-        view.dayOfWeek.setHasFixedSize(true)
-        view.dayOfWeek.setItemViewCacheSize(7)
-        view.dayOfWeek.adapter = adapterDay
         return view
     }
 

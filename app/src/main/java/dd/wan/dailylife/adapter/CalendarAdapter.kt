@@ -16,6 +16,7 @@ import android.view.GestureDetector
 import dd.wan.dailylife.R
 
 
+
 class CalendarAdapter(var list: ArrayList<Date>, var currentDate: Calendar) :
     RecyclerView.Adapter<CalendarAdapter.ViewHolder>() {
 
@@ -24,7 +25,6 @@ class CalendarAdapter(var list: ArrayList<Date>, var currentDate: Calendar) :
     var posision = -1
     var col: Int = Color.TRANSPARENT
     lateinit var context: Context
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         var view: View =
             LayoutInflater.from(parent.context).inflate(R.layout.custom_item, parent, false)
@@ -122,36 +122,3 @@ class CalendarAdapter(var list: ArrayList<Date>, var currentDate: Calendar) :
         }
     }
 }
-
-// Double click 2
-//            var i = 0
-//            var mHandler: Handler = Handler()
-//            layout.setOnTouchListener(object : View.OnTouchListener {
-//                override fun onTouch(v: View?, event: MotionEvent?): Boolean {
-//                    itemSelected = adapterPosition
-//                    daySelected = sdfDate.format(list.get(adapterPosition))
-//                    i++
-//                    if (i == 1) {
-//                        mHandler.postDelayed(Runnable {
-//                            if (i != 0) {
-//                                col = Color.CYAN
-//                                notifyDataSetChanged()
-//                            }
-//                            i = 0
-//                        }, 250)
-//                    }
-//                    if (i == 2) {
-//                        i = 0
-//                        val color: Int =
-//                            Color.argb(
-//                                255,
-//                                rnd.nextInt(127) + 127,
-//                                rnd.nextInt(127) + 127,
-//                                rnd.nextInt(127) + 127
-//                            )
-//                        col = color
-//                        notifyDataSetChanged()
-//                    }
-//                    return false
-//                }
-//            })

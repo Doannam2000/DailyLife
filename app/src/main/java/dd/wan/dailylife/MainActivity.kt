@@ -5,14 +5,17 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.core.view.GravityCompat
 import androidx.fragment.app.*
+import androidx.lifecycle.ViewModelProvider
 import dd.wan.dailylife.fragment.CalendarFrag
+import dd.wan.dailylife.fragment.DiaryFragment
 import dd.wan.dailylife.fragment.SettingFragment
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.toolbar.*
+import java.util.*
+import kotlin.collections.ArrayList
 
 
 class MainActivity : AppCompatActivity() {
-//    var check = true
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -21,17 +24,20 @@ class MainActivity : AppCompatActivity() {
             drawerLayout.openDrawer(GravityCompat.START)
         }
         var listFragment = ArrayList<Fragment>()
-        listFragment.add(DialogFragment())
+        listFragment.add(DiaryFragment())
         listFragment.add(CalendarFrag())
         listFragment.add(SettingFragment())
-        var adapter = ViewAdapter(supportFragmentManager, 0, listFragment)
+        var adapter = ViewAdapter(supportFragmentManager, listFragment)
         content.adapter = adapter
         tabLayout.setupWithViewPager(content)
-        fbtnAdd.setOnClickListener { startActivity(Intent(this,AddDiaryActivity::class.java)) }
+        fbtnAdd.setOnClickListener {
+            startActivity(Intent(this, AddDiaryActivity::class.java))
+        }
+
     }
 
-    class ViewAdapter(fm: FragmentManager, behavior: Int, var list: ArrayList<Fragment>) :
-        FragmentPagerAdapter(fm, behavior) {
+    class ViewAdapter(fm: FragmentManager, var list: ArrayList<Fragment>) :
+        FragmentPagerAdapter(fm) {
         override fun getCount(): Int {
             return list.size
         }
@@ -45,27 +51,11 @@ class MainActivity : AppCompatActivity() {
                 0 -> return "Gần đây"
                 1 -> return "Lịch"
                 2 -> return "Thiết lập"
-                else ->return "Gần đây"
+                else -> return "Gần đây"
             }
         }
 
     }
 
-
-//    rq pass if tab another app
-//
-//    override fun onResume() {
-//        super.onResume()
-//        if(!check)
-//        {
-//            check = true
-//            startActivity(Intent(this,PassActivity::class.java))
-//        }
-//    }
-//
-//    override fun onPause() {
-//        super.onPause()
-//        check = false
-//    }
 }
 
