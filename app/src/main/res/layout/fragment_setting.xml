@@ -6,5 +6,10 @@
     tools:context=".fragment.SettingFragment"
     android:background="#ffdf">
 
-
+    <Button
+        android:id="@+id/btnPass"
+        android:layout_gravity="center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Cài mật khẩu"/>
 </FrameLayout>

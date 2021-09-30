@@ -8,11 +8,13 @@ import android.os.Bundle
 import android.os.Handler
 import android.view.View
 import android.view.animation.AnimationUtils
+import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_pass.*
 
 class PassActivity : AppCompatActivity() {
     var pass = ""
     var pin = 0
+    var check = 0
     lateinit var sharedPreferences: SharedPreferences
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -22,6 +24,24 @@ class PassActivity : AppCompatActivity() {
         sharedPreferences = getSharedPreferences("SHARE_PREFERENCES", Context.MODE_PRIVATE)
         pin = sharedPreferences.getInt("pin", 0)
 
+        var intent = intent
+        check = intent.getIntExtra("pin", 0)
+
+        when(check)
+        {
+            1-> textView.text = "Nhập mật khẩu cũ"
+            2->textView.text = "Nhập mật khẩu mới"
+        }
+        if(pin == 0 && check !=2)
+        {
+            Toast.makeText(this,"Nên cài mật khẩu để bảo mật dữ liệu",Toast.LENGTH_SHORT).show()
+            startActivity(
+                Intent(
+                    this,
+                    MainActivity::class.java
+                ).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+            )
+        }
         btn0.setOnClickListener(listener)
         btn1.setOnClickListener(listener)
         btn2.setOnClickListener(listener)
@@ -61,18 +81,43 @@ class PassActivity : AppCompatActivity() {
             imagePass.setImageResource(R.drawable.tim3)
         else if (pass.length == 4) {
             imagePass.setImageResource(R.drawable.tim4)
-            if (pass.toInt() == 1234) {
-                startActivity(Intent(this, MainActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK))
+            if (check == 2) {
+                var edit:SharedPreferences.Editor = sharedPreferences.edit()
+                edit.putInt("pin",pass.toInt())
+                edit.apply()
+                Toast.makeText(this,"Tạo mật khẩu thành công !",Toast.LENGTH_SHORT).show()
+                startActivity(
+                    Intent(
+                        this,
+                        MainActivity::class.java
+                    ).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                )
+            }
+            if (pass.toInt() == pin) {
+                if (check == 0) {
+                    startActivity(
+                        Intent(
+                            this,
+                            MainActivity::class.java
+                        ).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                    )
+                }
+                if(check == 1)
+                {
+                    var intent = Intent(this,PassActivity::class.java)
+                    intent.putExtra("pin",check+1)
+                    startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK))
+                }
             } else {
                 val shake = AnimationUtils.loadAnimation(this, R.anim.shake)
                 textView.text = "Mật khẩu không đúng"
                 imagePass.animation = shake
                 val handel = Handler()
                 handel.postDelayed(Runnable {
-                     textView.text = "Nhập mật khẩu nà"
+                    textView.text = "Nhập mật khẩu nà"
                     imagePass.setImageDrawable(null)
                     pass = ""
-                },1000)
+                }, 1000)
             }
         } else
             imagePass.setImageDrawable(null)
