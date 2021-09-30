@@ -23,24 +23,20 @@ class PassActivity : AppCompatActivity() {
         supportActionBar?.hide()
         sharedPreferences = getSharedPreferences("SHARE_PREFERENCES", Context.MODE_PRIVATE)
         pin = sharedPreferences.getInt("pin", 0)
-
         var intent = intent
         check = intent.getIntExtra("pin", 0)
-
-        when(check)
-        {
-            1-> textView.text = "Nhập mật khẩu cũ"
-            2->textView.text = "Nhập mật khẩu mới"
-        }
-        if(pin == 0 && check !=2)
-        {
-            Toast.makeText(this,"Nên cài mật khẩu để bảo mật dữ liệu",Toast.LENGTH_SHORT).show()
+        if (pin == 0 && check != 2) {
+            Toast.makeText(this, "Nên cài mật khẩu để bảo mật dữ liệu", Toast.LENGTH_SHORT).show()
             startActivity(
                 Intent(
                     this,
                     MainActivity::class.java
                 ).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
             )
+        }
+        when (check) {
+            1 -> textView.text = "Nhập mật khẩu cũ"
+            2 -> textView.text = "Nhập mật khẩu mới"
         }
         btn0.setOnClickListener(listener)
         btn1.setOnClickListener(listener)
@@ -82,42 +78,42 @@ class PassActivity : AppCompatActivity() {
         else if (pass.length == 4) {
             imagePass.setImageResource(R.drawable.tim4)
             if (check == 2) {
-                var edit:SharedPreferences.Editor = sharedPreferences.edit()
-                edit.putInt("pin",pass.toInt())
+                var edit: SharedPreferences.Editor = sharedPreferences.edit()
+                edit.putInt("pin", pass.toInt())
                 edit.apply()
-                Toast.makeText(this,"Tạo mật khẩu thành công !",Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Tạo mật khẩu thành công !", Toast.LENGTH_SHORT).show()
                 startActivity(
                     Intent(
                         this,
                         MainActivity::class.java
                     ).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
                 )
-            }
-            if (pass.toInt() == pin) {
-                if (check == 0) {
-                    startActivity(
-                        Intent(
-                            this,
-                            MainActivity::class.java
-                        ).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
-                    )
-                }
-                if(check == 1)
-                {
-                    var intent = Intent(this,PassActivity::class.java)
-                    intent.putExtra("pin",check+1)
-                    startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK))
-                }
             } else {
-                val shake = AnimationUtils.loadAnimation(this, R.anim.shake)
-                textView.text = "Mật khẩu không đúng"
-                imagePass.animation = shake
-                val handel = Handler()
-                handel.postDelayed(Runnable {
-                    textView.text = "Nhập mật khẩu nà"
-                    imagePass.setImageDrawable(null)
-                    pass = ""
-                }, 1000)
+                if (pass.toInt() == pin) {
+                    if (check == 1) {
+                        textView.text = "Nhập mật khẩu mới"
+                        check++
+                        pass = ""
+                        checkImage()
+                    } else {
+                        startActivity(
+                            Intent(
+                                this,
+                                MainActivity::class.java
+                            ).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                        )
+                    }
+                } else {
+                    val shake = AnimationUtils.loadAnimation(this, R.anim.shake)
+                    textView.text = "Mật khẩu không đúng"
+                    imagePass.animation = shake
+                    val handel = Handler()
+                    handel.postDelayed(Runnable {
+                        textView.text = "Nhập mật khẩu nà"
+                        imagePass.setImageDrawable(null)
+                        pass = ""
+                    }, 1000)
+                }
             }
         } else
             imagePass.setImageDrawable(null)
