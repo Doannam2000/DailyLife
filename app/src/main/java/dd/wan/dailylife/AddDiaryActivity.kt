@@ -37,7 +37,7 @@ class AddDiaryActivity : AppCompatActivity() {
         editTitle.setText(nt.title)
         editContent.setText(nt.string)
 
-
+        editTitle.requestFocus()
         // chọn ngày viết ghi chú
         val dateSetListener =
             DatePickerDialog.OnDateSetListener { view, year, monthOfYear, dayOfMonth ->

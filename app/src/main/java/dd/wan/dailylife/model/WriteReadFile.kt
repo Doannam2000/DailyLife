@@ -129,65 +129,70 @@ class WriteReadFile(var context: Context) {
                 var fr = FileReader(file)
                 var bf = BufferedReader(fr)
                 bf.readLine()
-                var dem = 0
+                var dem = 0        // biến này để quy định lấy cột nào 0 -> date , 1->title , 2-> content
                 var date = ""
                 var title = ""
                 var content = ""
-                var check = 2
-                while (true) {
+                var check = 2     // check xem dòng đó đã đủ hay chưa ( dấu ngoặc kép luôn luôn là số chẵn )
+                while (true) {              // let's do it
                     var line: String? = bf.readLine() ?: break
-                    if (line!!.contains('"') || check %2!=0) // trường hợp không có kí tự xuống dòng hoặc dấu ,
+                    if (line!!.contains('"') || check %2!=0)  // đặc biệt hoặc dấu ngoặc kép chưa đủ ( nội dung nhảy xuống dòng )
                     {
                         for (i in line.indices) {
                             when (dem) {
                                 0 -> {
-                                    if (line[i] == ',' && check % 2 == 0) {
+                                    if (line[i] == ',' && check % 2 == 0) {    // xem hết cột chưa hết thì chuyển sang tìm title ( dem=1 )
                                         dem = 1
                                         check = 2
                                         continue
                                     }
-                                    if (line[i] != ',') {
+                                    if (line[i] != ',') {           // chưa tới thì tiếp tục chạy
                                         date += line[i]
                                         continue
                                     }
                                 }
-                                //
                                 // 13/10/2021,"c "" hi """,tr
                                 1 -> {
-                                    if (line[i] == '"') {
+                                    if (line[i] == '"') {               // tăng biến check khi thấy kí tự "
                                         check++
                                     }
-                                    if (line[i] != ',' || (line[i] == ',' && check % 2 != 0)) {
+                                    if (line[i] != ',' || (line[i] == ',' && check % 2 != 0)) {     // nếu k gặp dấu phẩy hoặc gặp nhưng kí tự " không chẵn thì thêm vào title
                                         title += line[i]
                                     }
-                                    if (check % 2 == 0 && line[i] == ',') {
+                                    if (check % 2 == 0 && line[i] == ',') {             // kí tự " chẵn là tới dấu , chuyển sang giai đoạn tìm content
                                         dem = 2
-                                        check = 2
+                                        check = 2           // reset check
                                         continue
                                     }
                                 }
                                 2 -> {
                                     content += line[i]
-                                    if (line[i] == '"') {
+                                    if (line[i] == '"') {   // tăng biến check khi thấy kí tự "
                                         check++
                                     }
-                                    if (check % 2 == 0 && i == line.length - 1) {
+                                    if (check % 2 == 0 && i == line.length - 1) {    // kí tự " chẵn và hết dòng -> tìm xong
                                         check = 2
-                                        dem = 0
+                                        dem = 0             // quay lại tìm date
                                         break
                                     }
-                                    if (i == line.length - 1 && check % 2 != 0) {
-                                        content += "\n"
+                                    if (i == line.length - 1 && check % 2 != 0) {   // hết dòng nhưng kí tự " không chẵn -> làm tiếp
+                                        content += "\n"         //vì k set lại dem nên nó vẫn tiếp tục tìm content
                                         break
                                     }
                                 }
                             }
                         }
-                        if (check % 2 == 0) {
-                            title = title.substring(1,title.length-1)
-                            title = title.replace("\"\"","\"")
-                            content = content.substring(1,content.length-1)
-                            content = content.replace("\"\"","\"")
+                        if (check % 2 == 0) {   // check xem content đã đủ chưa
+                            if(title.contains("\""))
+                            {
+                                title = title.substring(1,title.length-1)
+                                title = title.replace("\"\"","\"")
+                            }
+                            if(content.contains("\""))
+                            {
+                                content = content.substring(1,content.length-1)
+                                content = content.replace("\"\"","\"")
+                            }
                             var note = Note(sdf.parse(date), title, content)
                             date = ""
                             title = ""
@@ -195,7 +200,7 @@ class WriteReadFile(var context: Context) {
                             list.add(note)
                         }
                     }
-                    else  // trường hợp này thì chắc chắn có thêm dấu phẩy hoặc xuống dòng
+                    else    // trường hợp không có kí tự xuống dòng hoặc dấu , " hoặc là chuỗi content của dòng trên
                     {
                         if(check %2==0)
                         {

@@ -83,31 +83,29 @@ class MainActivity : AppCompatActivity() {
                     Toast.makeText(this,"Đã sao lưu thành công",Toast.LENGTH_SHORT).show()
                 }
                 R.id.restore -> {
-//                    val builder: AlertDialog.Builder = AlertDialog.Builder(this)
-//                    builder.setMessage("Khi khôi phục dữ liệu hiện tại sẽ mất bạn có muốn tiếp tục ?")
-//                    builder.setCancelable(true)
-//                    builder.setPositiveButton("Có") { dialog, id ->
-//                        sqlHelper.deleteAllDB()
-//                        var list = writeFile.readFile()
-//                        sqlHelper.insertList(list)
-//                        startActivity(
-//                            Intent(
-//                                this,
-//                                MainActivity::class.java,
-//                            ).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK),
-//                        )
-//                        dialog.cancel()
-//                        Toast.makeText(this,"Đã khôi phục thành công", Toast.LENGTH_SHORT).show()
-//                    }
-//                    builder.setNegativeButton("Không") { dialog, id -> dialog.cancel() }
-//                    val alert: AlertDialog = builder.create()
-//                    alert.show()
-                    var list = writeFile.readFile()
-                    list.forEach {
-                        Log.d("hhhhhh :date",it.date.toString())
-                        Log.d("hhhhhh :title",it.title+" ")
-                        Log.d("hhhhhh :content",it.string+" ")
+                    val builder: AlertDialog.Builder = AlertDialog.Builder(this)
+                    builder.setMessage("Khi khôi phục dữ liệu hiện tại sẽ mất bạn có muốn tiếp tục ?")
+                    builder.setCancelable(true)
+                    builder.setPositiveButton("Có") { dialog, id ->
+                        sqlHelper.deleteAllDB()
+                        var list = writeFile.readFile()
+                        list.forEach {
+                            Log.d("hhhhh title :",it.title)
+                            Log.d("hhhhh content :",it.string)
+                        }
+                        sqlHelper.insertList(list)
+                        startActivity(
+                            Intent(
+                                this,
+                                MainActivity::class.java,
+                            ).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK),
+                        )
+                        dialog.cancel()
+                        Toast.makeText(this,"Đã khôi phục thành công", Toast.LENGTH_SHORT).show()
                     }
+                    builder.setNegativeButton("Không") { dialog, id -> dialog.cancel() }
+                    val alert: AlertDialog = builder.create()
+                    alert.show()
                 }
             }
             drawerLayout.closeDrawer(GravityCompat.START)
