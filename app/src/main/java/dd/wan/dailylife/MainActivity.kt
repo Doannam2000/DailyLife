@@ -1,11 +1,13 @@
 package dd.wan.dailylife
 
+import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.core.view.GravityCompat
 import androidx.fragment.app.*
@@ -13,6 +15,7 @@ import dd.wan.dailylife.fragment.CalendarFrag
 import dd.wan.dailylife.fragment.DiaryFragment
 import dd.wan.dailylife.fragment.SettingFragment
 import dd.wan.dailylife.model.Note
+import dd.wan.dailylife.model.WriteReadFile
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.toolbar.*
 import org.apache.commons.csv.CSVFormat
@@ -26,10 +29,15 @@ import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 import org.apache.commons.csv.CSVRecord
+import java.io.BufferedReader
+import java.io.FileReader
+import java.io.FileWriter
 import java.lang.System.`in`
 
 
 class MainActivity : AppCompatActivity() {
+
+
     @RequiresApi(Build.VERSION_CODES.P)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,6 +47,9 @@ class MainActivity : AppCompatActivity() {
         navMenu.setOnClickListener {
             drawerLayout.openDrawer(GravityCompat.START)
         }
+
+        var writeFile = WriteReadFile(this)
+
         var listFragment = ArrayList<Fragment>()
         listFragment.add(DiaryFragment())
         listFragment.add(CalendarFrag())
@@ -68,12 +79,28 @@ class MainActivity : AppCompatActivity() {
                     }
                 }
                 R.id.backUp -> {
-                    writeFile(sqlHelper.getAllDB())
+                    writeFile.writeFile(sqlHelper.getAllDB())
+                    Toast.makeText(this,"Đã sao lưu thành công",Toast.LENGTH_SHORT).show()
                 }
-                R.id.restore-> {
-                    sqlHelper.deleteAllDB()
-                    var list = readFile()
-                    sqlHelper.insertList(list)
+                R.id.restore -> {
+                    val builder: AlertDialog.Builder = AlertDialog.Builder(this)
+                    builder.setMessage("Khi khôi phục dữ liệu hiện tại sẽ mất bạn có muốn tiếp tục ?")
+                    builder.setCancelable(true)
+                    builder.setPositiveButton("Có") { dialog, id ->
+                        sqlHelper.deleteAllDB()
+                        var list = writeFile.readFile()
+                        sqlHelper.insertList(list)
+                        startActivity(
+                            Intent(
+                                this,
+                                MainActivity::class.java,
+                            ).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK),
+                        )
+                        dialog.cancel()
+                    }
+                    builder.setNegativeButton("Không") { dialog, id -> dialog.cancel() }
+                    val alert: AlertDialog = builder.create()
+                    alert.show()
                 }
             }
             drawerLayout.closeDrawer(GravityCompat.START)
@@ -81,47 +108,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
-    fun writeFile(list: ArrayList<Note>) {
-        val sdf = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
-        try {
-            val filePaths: String = filesDir.parentFile.toString() + "/diary.csv"
-            Log.d("filepath", filePaths)
-            val file = File(filePaths)
-            val writer = Files.newBufferedWriter(Paths.get(file.toURI()))
-            val csvPrinter =
-                CSVPrinter(writer, CSVFormat.DEFAULT.withHeader("Date", "Title", "Content"))
-            for (item in list) {
-                csvPrinter.printRecord(sdf.format(item.date), item.title, item.string)
-            }
-            csvPrinter.flush()
-            csvPrinter.close()
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-    }
 
-    @RequiresApi(Build.VERSION_CODES.O)
-    fun readFile(): ArrayList<Note> {
-        var list = ArrayList<Note>()
-        val sdf = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
-        val filePaths: String = filesDir.parentFile.toString() + "/diary.csv"
-        val file = File(filePaths)
-        if (file.exists())
-            try {
-                val reader = Files.newBufferedReader(Paths.get(file.toURI()))
-                val records: Iterable<CSVRecord> = CSVFormat.EXCEL.withHeader().parse(reader)
-                for (item in records) {
-                    val date = sdf.parse(item.get("Date"))
-                    val title = item.get("Title")
-                    val content = item.get("Content")
-                    list.add(Note(date, title, content))
-                }
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
-        return list
-    }
 
     class ViewAdapter(fm: FragmentManager, var list: ArrayList<Fragment>) :
         FragmentPagerAdapter(fm) {

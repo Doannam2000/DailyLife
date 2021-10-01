@@ -59,7 +59,8 @@ class AddDiaryActivity : AppCompatActivity() {
             ).show()
         }
         btnSave.setOnClickListener {
-            if (editTitle.text.equals("") || editContent.text.equals("")) {
+            if (editTitle.text.toString().equals("") || editContent.text.toString().equals("")) {
+                Toast.makeText(this,"Bạn phải nhập đủ thông tin",Toast.LENGTH_SHORT).show()
             } else {
                 var date = cal.time
                 if (sqlHelper.checkInsert(
@@ -100,6 +101,7 @@ class AddDiaryActivity : AppCompatActivity() {
                         MainActivity::class.java,
                     ).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK),
                 )
+                Toast.makeText(this,"Đã khôi phục thành công", Toast.LENGTH_SHORT).show()
                 dialog.cancel()
             }
             builder.setNegativeButton("Không") { dialog, id -> dialog.cancel() }

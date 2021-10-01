@@ -109,20 +109,12 @@
                 android:textColor="@color/pink" />
         </LinearLayout>
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recycler_diary"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:background="#ECE8E8"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/addDiary" />
 
         <TextView
             android:id="@+id/txtNoEvent"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:text="Không có sự kiện nào"
+            android:text="Tạm thời em chưa làm cái này"
             android:textColor="@color/gray"
             android:gravity="center"
             android:background="#ECE8E8"
