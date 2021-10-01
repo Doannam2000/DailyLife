@@ -5,6 +5,7 @@ import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
 import org.apache.commons.csv.CSVFormat
+import org.apache.commons.csv.CSVPrinter
 import org.apache.commons.csv.CSVRecord
 import java.io.File
 import java.io.FileWriter
@@ -23,34 +24,69 @@ class WriteReadFile(var context: Context) {
         try {
             val file = File(filePaths)
             val fw = FileWriter(file)
-            fw.append("Date,Title,Content\n")
+            fw.append("Date,Title,Content\n") // add header
+
+            // Bắt đầu cuộc hành trình nào
             list.forEach {
-                fw.append(sdf.format(it.date))
+                fw.append(sdf.format(it.date)) //  thêm ngày trước
                 fw.append(",")
-                if (it.title.contains("\n") || it.title.contains(',')) {
-                    if (it.title.contains('"')) {
+                if (it.title.contains("\n") || it.title.contains(',')) { // tìm xem có  tồn tại trường hợp đặc biệt không
+                    if (it.title.contains('"')) { // đặc biệt hơn nữa =.=
+                        var dem = 0                     // cực kì đặc biệt khi có nhiều cái cạnh nhau
                         var string: ArrayList<String> = it.title.split("\"") as ArrayList<String>
                         string.forEach { item ->
-                            if (item != "") {
+                            if (item != ""&& dem ==0) {
                                 fw.append("\"")
                                 fw.append(item)
                                 fw.append("\"")
                             }
+                            else if(item =="" && string.indexOf(item)!=0 && string.indexOf(item)!=string.size-1) // đếm xem bao nhiêu cái cạnh nhau nào
+                            {
+                                dem++
+                            }
+                            if (item != "" && dem != 0) { // đã có những cái cạnh nhau trước đó
+                                fw.append("\"")
+                                for (i in 0 until dem)
+                                {
+                                    fw.append("\"")
+                                }
+                                fw.append("\"")
+                                fw.append("\"") // nhớ phải thêm item nữa nhé
+                                fw.append(item)
+                                fw.append("\"")
+                                dem = 0
+                            }
                         }
                     } else {
-                        Log.d("okeeee", "check k được")
                         fw.append("\"")
                         fw.append(it.title)
                         fw.append("\"")
                     }
                 } else {
-                    if (it.title.contains("\"")) {
+                    if (it.title.contains("\"")) { // tương tự thôi nà
+                        var dem = 0
                         var string: ArrayList<String> = it.title.split("\"") as ArrayList<String>
                         string.forEach { item ->
-                            if (item != "") {
+                            if (item != "" && dem ==0) {
                                 fw.append("\"")
                                 fw.append(item)
                                 fw.append("\"")
+                            }
+                            else if(item =="" && string.indexOf(item)!=0 && string.indexOf(item)!=string.size-1)
+                            {
+                                dem++
+                            }
+                            if (item != "" && dem != 0) {
+                                fw.append("\"")
+                                for (i in 0 until dem)
+                                {
+                                    fw.append("\"")
+                                }
+                                fw.append("\"")
+                                fw.append("\"")
+                                fw.append(item)
+                                fw.append("\"")
+                                dem = 0
                             }
                         }
                     } else {
@@ -59,31 +95,63 @@ class WriteReadFile(var context: Context) {
                 }
 
                 fw.append(",")
-                if (it.string.contains("\n") || it.string.contains(',')) {
+                if (it.string.contains("\n") || it.string.contains(',')) { // cái này cũng như cái trên
                     if (it.string.contains('"')) {
-                        Log.d("okeeee", "check được")
+                        var dem = 0
                         var string: ArrayList<String> = it.string.split("\"") as ArrayList<String>
                         string.forEach { item ->
-                            if (item != "") {
+                            if (item != ""&& dem ==0) {
                                 fw.append("\"")
                                 fw.append(item)
                                 fw.append("\"")
                             }
+                            else if(item =="" && string.indexOf(item)!=0 && string.indexOf(item)!=string.size-1)
+                            {
+                                dem++
+                            }
+                            if (item != "" && dem != 0) {
+                                fw.append("\"")
+                                for (i in 0 until dem)
+                                {
+                                    fw.append("\"")
+                                }
+                                fw.append("\"")
+                                fw.append("\"")
+                                fw.append(item)
+                                fw.append("\"")
+                                dem = 0
+                            }
                         }
                     } else {
-                        Log.d("okeeee", "check k được")
                         fw.append("\"")
                         fw.append(it.string)
                         fw.append("\"")
                     }
                 } else {
                     if (it.string.contains("\"")) {
+                        var dem = 0
                         var string: ArrayList<String> = it.string.split("\"") as ArrayList<String>
                         string.forEach { item ->
-                            if (item != "") {
+                            if (item != "" && dem == 0) {
                                 fw.append("\"")
                                 fw.append(item)
                                 fw.append("\"")
+                            }
+                            else if(item =="" && string.indexOf(item)!=0 && string.indexOf(item)!=string.size-1)
+                            {
+                                dem++
+                            }
+                            if (item != "" && dem != 0) {
+                                fw.append("\"")
+                                for (i in 0 until dem)
+                                {
+                                    fw.append("\"")
+                                }
+                                fw.append("\"")
+                                fw.append("\"")
+                                fw.append(item)
+                                fw.append("\"")
+                                dem = 0
                             }
                         }
                     } else {
