@@ -1,5 +1,6 @@
 package dd.wan.dailylife.fragment
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -7,7 +8,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupMenu
+import android.widget.ShareActionProvider
 import android.widget.TextView
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager.widget.ViewPager
@@ -15,37 +18,37 @@ import androidx.viewpager2.widget.ViewPager2
 import dd.wan.dailylife.AddDiaryActivity
 import dd.wan.dailylife.R
 import dd.wan.dailylife.adapter.ViewPagerAdapter
+import dd.wan.dailylife.model.SharedViewModel
 import kotlinx.android.synthetic.main.fragment_calendar2.view.*
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.Calendar
 import kotlin.collections.ArrayList
 
-class CalendarFrag : Fragment() {
+class CalendarFrag() : Fragment() {
 
     private var mSelectedPageIndex = 1
     var list = ArrayList<CalendarFragment>()
     var listday = arrayListOf<String>("T.2", "T.3", "T.4", "T.5", "T.6", "T.7", "CN")
     var sdfMonth = SimpleDateFormat("MM", Locale.getDefault())
     var sdfYear = SimpleDateFormat("yyyy", Locale.getDefault())
-
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
 
         var view = inflater.inflate(R.layout.fragment_calendar2, container, false)
-
         var calendar: Calendar = Calendar.getInstance(Locale.getDefault())
         var prevMonth = calendar.clone() as Calendar
         var nextMonth = calendar.clone() as Calendar
         prevMonth.add(Calendar.MONTH, -1)
         nextMonth.add(Calendar.MONTH, 1)
         var month = sdfMonth.format(calendar.time)
-        view.tv_month.text = "Tháng "+month
+        view.tv_month.text = "Tháng " + month
         var year = sdfYear.format(calendar.time)
         view.tv_year.text = year
+
+        var model = ViewModelProvider(requireActivity()).get(SharedViewModel::class.java)
 
         // tạo danh sách fragment và setup viewpager
         list.add(CalendarFragment().newInstance(prevMonth, 5)) // mặc định bắt đầu từ thứ 2
@@ -58,7 +61,8 @@ class CalendarFrag : Fragment() {
             override fun onPageScrolled(
                 position: Int,
                 positionOffset: Float,
-                positionOffsetPixels: Int) {
+                positionOffsetPixels: Int
+            ) {
                 super.onPageScrolled(position, positionOffset, positionOffsetPixels)
             }
 
@@ -77,7 +81,7 @@ class CalendarFrag : Fragment() {
                     }
                     view.viewPager.setCurrentItem(1, false)
                     var cal = list[1].getCurrentCalendar()
-                    view.tv_month.text = "Tháng "+sdfMonth.format(cal.time)
+                    view.tv_month.text = "Tháng " + sdfMonth.format(cal.time)
                     view.tv_year.text = sdfYear.format(cal.time)
                 }
             }
@@ -86,9 +90,9 @@ class CalendarFrag : Fragment() {
         view.viewPager.offscreenPageLimit = 2
         view.viewPager.setCurrentItem(1, false)
         var adapterDay = DayAdapter(listday)
-        view.addDiary.setOnClickListener{
-            var intent = Intent(activity,AddDiaryActivity::class.java)
-            intent.putExtra("date",list[1].getItemSelected())
+        view.addDiary.setOnClickListener {
+            var intent = Intent(activity, AddDiaryActivity::class.java)
+            intent.putExtra("date", list[1].getItemSelected())
             startActivity(intent)
         }
         // hiển thị ngày trong tuần
@@ -181,4 +185,5 @@ class CalendarFrag : Fragment() {
             }
         }
     }
+
 }

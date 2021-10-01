@@ -1,15 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragment.SettingFragment"
-    android:background="#ffdf">
+    android:background="#ffdf"
+    android:orientation="vertical"
+    tools:context=".fragment.SettingFragment">
 
-    <Button
+    <include layout="@layout/header" />
+
+    <TextView
         android:id="@+id/btnPass"
-        android:layout_gravity="center"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Cài mật khẩu"/>
-</FrameLayout>
+        android:padding="10dp"
+        android:text="Cài mật khẩu"
+        android:textColor="@color/black"
+        android:textSize="20sp" />
+
+    <TextView
+        android:id="@+id/btnBackUp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:text="Sao lưu dữ liệu"
+        android:textColor="@color/black"
+        android:textSize="20sp" />
+
+    <TextView
+        android:id="@+id/btnRestore"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:text="Khôi phục"
+        android:textColor="@color/black"
+        android:textSize="20sp" />
+
+</LinearLayout>

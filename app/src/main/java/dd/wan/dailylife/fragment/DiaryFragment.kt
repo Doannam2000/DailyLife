@@ -13,9 +13,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
-import android.widget.EditText
-import android.widget.ImageView
-import android.widget.TextView
+import android.widget.*
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -29,6 +27,8 @@ import kotlinx.android.synthetic.main.fragment_diary.*
 import kotlinx.android.synthetic.main.fragment_diary.view.*
 import androidx.core.content.ContextCompat.getSystemService
 import androidx.core.widget.addTextChangedListener
+import androidx.lifecycle.ViewModelProvider
+import dd.wan.dailylife.model.SharedViewModel
 
 
 class DiaryFragment : Fragment() {
@@ -43,18 +43,39 @@ class DiaryFragment : Fragment() {
         // lấy dữ liệu đổ vào recyclerView
         val sqlHelper = SQLHelper(context)
         var list: ArrayList<Note> = sqlHelper.getAllDB()
+
+        val sharedViewModel = ViewModelProvider(requireActivity()).get(SharedViewModel::class.java)
+        sharedViewModel.saveData(list)
         var listP = sqlHelper.getAllDB()
         var btnSearch: ImageView = view.findViewById(R.id.btnSearch)
         var recycler: RecyclerView = view.findViewById(R.id.listDiary)
         var txtSort: TextView = view.findViewById(R.id.txtSort)
         var editSearch: EditText = view.findViewById(R.id.editSearch)
-
-
         list.sortByDescending { it.date }
         var adapter = DiaryAdapter(list)
         recycler.layoutManager = LinearLayoutManager(requireContext())
         recycler.setHasFixedSize(true)
         recycler.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
+//        adapter.setCallBack { posision, it ->
+//            var popMenu = PopupMenu(context, it)
+//            popMenu.menuInflater.inflate(R.menu.menu_diary, popMenu.menu)
+//            popMenu.show()
+//            popMenu.setOnMenuItemClickListener {
+//                when (it.itemId) {
+//                    R.id.itemDelete -> {
+//                        if (SQLHelper(context).deleteDB(list.get(posision).date) > -1) {
+//                            Toast.makeText(context, "Xóa thành công ", Toast.LENGTH_SHORT).show()
+//                            list.removeAt(posision)
+//                            sharedViewModel.saveData(list)
+//                            adapter.notifyDataSetChanged()
+//                        } else
+//                            Toast.makeText(context, "Xóa không thành công ", Toast.LENGTH_SHORT)
+//                                .show()
+//                    }
+//                }
+//                false
+//            }
+//        }
         recycler.adapter = adapter
 
         // xử lý button Sắp xếp
@@ -78,17 +99,17 @@ class DiaryFragment : Fragment() {
                 imm.hideSoftInputFromWindow(editSearch.getWindowToken(), 0)
             }
         }
-        editSearch.addTextChangedListener(object :TextWatcher{
+        editSearch.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 var text = editSearch.text.toString()
                 list.clear()
-                for (item in listP)
-                {
-                    if(item.string.uppercase().contains(text.uppercase()) || item.title.uppercase().contains(text.uppercase()))
-                    {
+                for (item in listP) {
+                    if (item.string.uppercase().contains(text.uppercase()) || item.title.uppercase()
+                            .contains(text.uppercase())
+                    ) {
                         list.add(item)
                     }
                 }

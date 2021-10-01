@@ -46,6 +46,29 @@ class SQLHelper(context: Context?) : SQLiteOpenHelper(context, DB_NAME, null, DB
         return(insertDB(note))
     }
 
+    fun insertList(list:ArrayList<Note>)
+    {
+        list.forEach{
+            insertDB(it)
+        }
+    }
+    fun checkDelete(date:Date):Int {
+        var list = getAllDB()
+        for (item in list) {
+            if (sdf.format(date).equals(sdf.format(item.date))) {
+                return(deleteDB(date))
+            }
+        }
+        return 1
+    }
+
+    fun deleteAllDB()
+    {
+        val db = this.writableDatabase
+        db.delete(TB_DIARY, null, null)
+        db.close()
+    }
+
     fun deleteDB(date:Date) :Int {
         val db = this.writableDatabase
         var success = db.delete(TB_DIARY, "$DATE = ?", arrayOf(sdf.format(date)))

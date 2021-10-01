@@ -28,6 +28,13 @@ class DiaryAdapter(var list: ArrayList<Note>) : RecyclerView.Adapter<DiaryAdapte
     val sdfMonth = SimpleDateFormat("MM")
     lateinit var context: Context
 
+    lateinit var itemClick: (position: Int,view:View) -> Unit
+
+    fun setCallBack(click: (position: Int,view:View) -> Unit) {
+        itemClick = click
+    }
+
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DiaryAdapter.ViewHolder {
         var view = LayoutInflater.from(parent.context).inflate(R.layout.item_diary, parent, false)
         context = parent.context
@@ -49,7 +56,7 @@ class DiaryAdapter(var list: ArrayList<Note>) : RecyclerView.Adapter<DiaryAdapte
         var txtMonth: TextView = itemView.findViewById(R.id.txtMonth)
         var txtTitle: TextView = itemView.findViewById(R.id.txtTitle)
         var layout: ConstraintLayout = itemView.findViewById(R.id.itemDiary)
-        var btnMore: ImageView = itemView.findViewById(R.id.btnMore)
+//        var btnMore: ImageView = itemView.findViewById(R.id.btnMore)
         fun setData() {
             var item = list.get(adapterPosition)
             var date = item.date
@@ -66,25 +73,9 @@ class DiaryAdapter(var list: ArrayList<Note>) : RecyclerView.Adapter<DiaryAdapte
                 intent.putExtra("date", list.get(adapterPosition).date)
                 context.startActivity(intent)
             }
-            btnMore.setOnClickListener {
-                var popMenu = PopupMenu(context, it)
-                popMenu.menuInflater.inflate(R.menu.menu_diary, popMenu.menu)
-                popMenu.show()
-                popMenu.setOnMenuItemClickListener {
-                    when (it.itemId) {
-                        R.id.itemDelete -> {
-                            if (SQLHelper(context).deleteDB(list.get(adapterPosition).date) > -1) {
-                                Toast.makeText(context, "Xóa thành công ", Toast.LENGTH_SHORT).show()
-                                list.removeAt(adapterPosition)
-                                notifyDataSetChanged()
-                            } else
-                                Toast.makeText(context, "Xóa không thành công ", Toast.LENGTH_SHORT)
-                                    .show()
-                        }
-                    }
-                    false
-                }
-            }
+//            btnMore.setOnClickListener {
+//                itemClick.invoke(adapterPosition,it)
+//            }
         }
     }
 }

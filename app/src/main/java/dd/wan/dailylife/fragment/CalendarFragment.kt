@@ -1,33 +1,42 @@
 package dd.wan.dailylife.fragment
 
+import android.content.Context
+import android.content.SharedPreferences
+import android.os.Build
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.RequiresApi
 import androidx.core.os.bundleOf
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import dd.wan.dailylife.R
+import dd.wan.dailylife.SQLHelper
 import dd.wan.dailylife.adapter.CalendarAdapter
+import dd.wan.dailylife.model.Note
+import dd.wan.dailylife.model.SharedViewModel
 import java.util.*
 import kotlin.collections.ArrayList
 
 class CalendarFragment : Fragment() {
     var dates: ArrayList<Date> = ArrayList()
-
     lateinit var calendar: Calendar
     var start = 5
     lateinit var adapter: CalendarAdapter
     lateinit var calendarRecycler: RecyclerView
+    var listDate = ArrayList<Date>()
 
     fun newInstance(calendar: Calendar, start: Int) = CalendarFragment().apply {
         arguments = bundleOf(
             "calendar" to calendar,
-            "start" to start
+            "start" to start,
         )
     }
 
+    @RequiresApi(Build.VERSION_CODES.P)
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -38,8 +47,17 @@ class CalendarFragment : Fragment() {
         var view: View = inflater.inflate(R.layout.fragment_calendar, container, false)
         calendarRecycler = view.findViewById(R.id.recycler_calendar)
         calendarRecycler.itemAnimator = null
-        // hiển thị ngày tháng
-        adapter = CalendarAdapter(dates, calendar)
+        var model = ViewModelProvider(requireActivity()).get(SharedViewModel::class.java)
+        var list = ArrayList<Note>()
+        model.dataviewModel.observe(viewLifecycleOwner, { item ->
+            list = item
+            if (list.size == 0)
+                list = SQLHelper(context).getAllDB()
+            for (item in list) {
+                listDate.add(item.date)
+            }
+        })
+        adapter = CalendarAdapter(dates, calendar, listDate)
         updateData()
         setUpCalendar()
         return view
@@ -48,7 +66,6 @@ class CalendarFragment : Fragment() {
     fun setUpCalendar() {
         val layoutManager: RecyclerView.LayoutManager =
             GridLayoutManager(context, 7)
-
         calendarRecycler.layoutManager = layoutManager
         calendarRecycler.setHasFixedSize(true)
         calendarRecycler.setItemViewCacheSize(42)
@@ -106,7 +123,8 @@ class CalendarFragment : Fragment() {
     fun getCurrentCalendar(): Calendar {
         return calendar
     }
-    fun getItemSelected():Date{
-        return adapter.daySelected
+
+    fun getItemSelected(): Date {
+        return dates.get(adapter.itemSelected)
     }
 }

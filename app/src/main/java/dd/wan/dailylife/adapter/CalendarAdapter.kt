@@ -2,6 +2,8 @@ package dd.wan.dailylife.adapter
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Intent
+import android.content.SharedPreferences
 import android.graphics.Color
 import android.view.GestureDetector.SimpleOnGestureListener
 import android.view.LayoutInflater
@@ -13,18 +15,25 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import java.util.*
 import android.view.GestureDetector
+import dd.wan.dailylife.AddDiaryActivity
 import dd.wan.dailylife.R
+import java.text.SimpleDateFormat
 
 
-
-class CalendarAdapter(var list: ArrayList<Date>, var currentDate: Calendar) :
+class CalendarAdapter(
+    var list: ArrayList<Date>,
+    var currentDate: Calendar,
+    var listDate: ArrayList<Date>
+) :
     RecyclerView.Adapter<CalendarAdapter.ViewHolder>() {
 
     var daySelected = Calendar.getInstance().time
+    val sdf = SimpleDateFormat("E MMM dd yyyy", Locale.getDefault())
     var itemSelected = -1
-    var posision = -1
-    var col: Int = Color.TRANSPARENT
+    var col: Int = Color.CYAN
     lateinit var context: Context
+
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         var view: View =
             LayoutInflater.from(parent.context).inflate(R.layout.custom_item, parent, false)
@@ -70,10 +79,13 @@ class CalendarAdapter(var list: ArrayList<Date>, var currentDate: Calendar) :
                 textView.alpha = 0.2F
             }
             textView.text = day.toString()
-            if (itemSelected == adapterPosition) {
+            if (adapterPosition == itemSelected) {
                 layout.setBackgroundColor(col)
             } else {
-                layout.setBackgroundColor(Color.parseColor("#f8f8f8"))
+                if (check(list.get(adapterPosition)))
+                    layout.setBackgroundColor(Color.parseColor("#F6CFD6"))
+                else
+                    layout.setBackgroundColor(Color.parseColor("#f8f8f8"))
             }
         }
 
@@ -85,7 +97,7 @@ class CalendarAdapter(var list: ArrayList<Date>, var currentDate: Calendar) :
             var gestureDetector = GestureDetector(context, GestureListener())
             layout.setOnTouchListener { v, event ->
                 if (adapterPosition != -1) {
-                    posision = adapterPosition
+                    itemSelected = adapterPosition
                 }
                 gestureDetector.onTouchEvent(event)
             }
@@ -94,7 +106,7 @@ class CalendarAdapter(var list: ArrayList<Date>, var currentDate: Calendar) :
 
     inner class GestureListener : SimpleOnGestureListener() {
         override fun onSingleTapConfirmed(e: MotionEvent?): Boolean {
-            itemSelected = posision
+            itemSelected = itemSelected
             daySelected = list.get(itemSelected)
             col = Color.CYAN
             notifyDataSetChanged()
@@ -106,19 +118,19 @@ class CalendarAdapter(var list: ArrayList<Date>, var currentDate: Calendar) :
         }
 
         override fun onDoubleTap(e: MotionEvent): Boolean {
-            itemSelected = posision
-            daySelected = list.get(itemSelected)
-            val rnd = Random()
-            val color: Int =
-                Color.argb(
-                    255,
-                    rnd.nextInt(127) + 127,
-                    rnd.nextInt(127) + 127,
-                    rnd.nextInt(127) + 127
-                )
-            col = color
-            notifyDataSetChanged()
+            var intent = Intent(context,AddDiaryActivity::class.java)
+            intent.putExtra("date",list.get(itemSelected))
+            context.startActivity(intent)
             return true
         }
+    }
+
+    fun check(date: Date): Boolean {
+        for (ite in listDate) {
+            if (sdf.format(ite).equals(sdf.format(date))) {
+                return true
+            }
+        }
+        return false
     }
 }

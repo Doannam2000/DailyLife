@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.TextView
 import dd.wan.dailylife.AddDiaryActivity
 import dd.wan.dailylife.PassActivity
 import dd.wan.dailylife.R
@@ -21,7 +22,7 @@ class SettingFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         var view = inflater.inflate(R.layout.fragment_setting, container, false)
-        var btnPass:Button = view.findViewById(R.id.btnPass)
+        var btnPass:TextView = view.findViewById(R.id.btnPass)
         val sharedPreferences = context?.getSharedPreferences("SHARE_PREFERENCES", Context.MODE_PRIVATE)
         var pin = sharedPreferences?.getInt("pin",0)
         if(pin != 0 )

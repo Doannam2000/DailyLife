@@ -1,5 +1,6 @@
 package dd.wan.dailylife
 
+import android.app.AlertDialog
 import android.app.DatePickerDialog
 import android.content.Intent
 import android.os.Build
@@ -11,6 +12,8 @@ import dd.wan.dailylife.model.Note
 import kotlinx.android.synthetic.main.activity_add_diary.*
 import java.text.SimpleDateFormat
 import java.util.*
+import android.content.DialogInterface
+
 
 class AddDiaryActivity : AppCompatActivity() {
     val sdf = SimpleDateFormat("dd/MM/yyyy")
@@ -59,12 +62,17 @@ class AddDiaryActivity : AppCompatActivity() {
             if (editTitle.text.equals("") || editContent.text.equals("")) {
             } else {
                 var date = cal.time
-                if (sqlHelper.checkInsert(Note(date, editTitle.text.toString(), editContent.text.toString())) > -1) {
-                    Toast.makeText(this,"Ghi chú đã được lưu lại",Toast.LENGTH_SHORT).show()
-                }
-                else
-                {
-                    Toast.makeText(this,"Lưu không thành công ",Toast.LENGTH_SHORT).show()
+                if (sqlHelper.checkInsert(
+                        Note(
+                            date,
+                            editTitle.text.toString(),
+                            editContent.text.toString()
+                        )
+                    ) > 0
+                ) {
+                    Toast.makeText(this, "Ghi chú đã được lưu lại", Toast.LENGTH_SHORT).show()
+                } else {
+                    Toast.makeText(this, "Lưu không thành công ", Toast.LENGTH_SHORT).show()
                 }
                 startActivity(
                     Intent(
@@ -73,6 +81,31 @@ class AddDiaryActivity : AppCompatActivity() {
                     ).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
                 )
             }
+        }
+        btnDelete.setOnClickListener {
+
+            val builder: AlertDialog.Builder = AlertDialog.Builder(this)
+            builder.setMessage("Bạn muốn xóa bản ghi này ?")
+            builder.setCancelable(true)
+            builder.setPositiveButton("Có") { dialog, id ->
+                var date = cal.time
+                if (SQLHelper(this).checkDelete(date) > 0) {
+                    Toast.makeText(this, "Xóa thành công ", Toast.LENGTH_SHORT).show()
+                } else
+                    Toast.makeText(this, "Xóa không thành công ", Toast.LENGTH_SHORT)
+                        .show()
+                startActivity(
+                    Intent(
+                        this,
+                        MainActivity::class.java,
+                    ).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK),
+                )
+                dialog.cancel()
+            }
+            builder.setNegativeButton("Không") { dialog, id -> dialog.cancel() }
+            val alert: AlertDialog = builder.create()
+            alert.show()
+
         }
     }
 
