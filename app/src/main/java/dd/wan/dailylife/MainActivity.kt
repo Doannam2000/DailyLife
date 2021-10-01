@@ -97,6 +97,7 @@ class MainActivity : AppCompatActivity() {
                             ).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK),
                         )
                         dialog.cancel()
+                        Toast.makeText(this,"Đã khôi phục thành công", Toast.LENGTH_SHORT).show()
                     }
                     builder.setNegativeButton("Không") { dialog, id -> dialog.cancel() }
                     val alert: AlertDialog = builder.create()

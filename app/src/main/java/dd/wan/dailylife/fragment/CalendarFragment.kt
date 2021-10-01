@@ -125,6 +125,6 @@ class CalendarFragment : Fragment() {
     }
 
     fun getItemSelected(): Date {
-        return dates.get(adapter.itemSelected)
+        return adapter.daySelected
     }
 }

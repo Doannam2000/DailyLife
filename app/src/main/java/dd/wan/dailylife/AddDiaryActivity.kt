@@ -84,7 +84,6 @@ class AddDiaryActivity : AppCompatActivity() {
             }
         }
         btnDelete.setOnClickListener {
-
             val builder: AlertDialog.Builder = AlertDialog.Builder(this)
             builder.setMessage("Bạn muốn xóa bản ghi này ?")
             builder.setCancelable(true)
@@ -101,7 +100,6 @@ class AddDiaryActivity : AppCompatActivity() {
                         MainActivity::class.java,
                     ).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK),
                 )
-                Toast.makeText(this,"Đã khôi phục thành công", Toast.LENGTH_SHORT).show()
                 dialog.cancel()
             }
             builder.setNegativeButton("Không") { dialog, id -> dialog.cancel() }
