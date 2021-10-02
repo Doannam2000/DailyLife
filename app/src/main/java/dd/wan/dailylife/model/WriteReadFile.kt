@@ -136,6 +136,8 @@ class WriteReadFile(var context: Context) {
                 var check = 2     // check xem dòng đó đã đủ hay chưa ( dấu ngoặc kép luôn luôn là số chẵn )
                 while (true) {              // let's do it
                     var line: String? = bf.readLine() ?: break
+                    if(line =="")           // trường hợp xuoosgn dòng nhiều lần
+                        content+="\n"
                     if (line!!.contains('"') || check %2!=0)  // đặc biệt hoặc dấu ngoặc kép chưa đủ ( nội dung nhảy xuống dòng )
                     {
                         for (i in line.indices) {
